@@ -39,7 +39,8 @@
 
 // Huge send buffer
 #define SND_BUF_SIZE (4 * 1024 * 1024)
-#define VIDEO_CHUNK_SIZE (32 * 1024)
+// Use 1316 (7 * 188) to match standard UDP MPEG-TS packetization for fair comparison
+#define VIDEO_CHUNK_SIZE 1316
 
 typedef struct {
     xqc_engine_t *engine;
@@ -578,6 +579,22 @@ int main(int argc, char *argv[]) {
     xqc_conn_settings_t conn_settings = {0};
     conn_settings.idle_time_out = 60000;
     conn_settings.init_recv_window = 16 * 1024 * 1024; // If client sends data?
+
+    // --- FEC Configuration ---
+    conn_settings.enable_encode_fec = 1;
+    conn_settings.enable_decode_fec = 1;
+    conn_settings.fec_callback = xqc_reed_solomon_code_cb;
+    
+    // FEC Parameters
+    conn_settings.fec_params.fec_code_rate = 0.5f; 
+    conn_settings.fec_params.fec_max_symbol_num_per_block = 10;
+    conn_settings.fec_params.fec_max_window_size = 40;
+    
+    // Supported schemes
+    conn_settings.fec_params.fec_encoder_schemes_num = 1;
+    conn_settings.fec_params.fec_encoder_schemes[0] = XQC_REED_SOLOMON_CODE;
+    conn_settings.fec_params.fec_decoder_schemes_num = 1;
+    conn_settings.fec_params.fec_decoder_schemes[0] = XQC_REED_SOLOMON_CODE;
     xqc_server_set_conn_settings(ctx.engine, &conn_settings);
     
     // 6. Loop
