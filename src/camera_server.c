@@ -62,6 +62,43 @@ typedef struct {
     EVP_PKEY *server_key;
 } server_ctx_t;
 
+// --- Helper: Certificate Management ---
+void ensure_certificates_exist() {
+    const char *cert_path = "server.crt";
+    const char *key_path = "server.key";
+
+    if (access(cert_path, F_OK) != -1 && access(key_path, F_OK) != -1) {
+        // Files exist
+        fprintf(stderr, "[Server] Certificates found: %s, %s\n", cert_path, key_path);
+        return;
+    }
+
+    fprintf(stderr, "[Server] Certificates missing. Generating self-signed EC certificate...\n");
+    
+    // Use OpenSSL command to generate EC key and cert
+    // 1. Generate EC parameters (P-256)
+    // 2. Generate Key
+    // 3. Generate Self-Signed Cert
+    // We combine this into one command for simplicity/robustness using -newkey ec
+    
+    // Command: openssl req -x509 -nodes -days 365 -newkey ec:<(openssl ecparam -name prime256v1) -keyout server.key -out server.crt -subj "/CN=localhost"
+    // Simplified: openssl req -new -newkey diffie-hellman:parameters -x509 -nodes -out server.crt -keyout server.key
+    // Actually, asking xquic usually implies EC. Let's stick to a standard EC generation.
+    
+    const char *cmd = "openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 "
+                      "-nodes -keyout server.key -out server.crt -days 365 "
+                      "-subj \"/CN=localhost\" 2>/dev/null";
+
+    int ret = system(cmd);
+    if (ret != 0) {
+        fprintf(stderr, "[Server] ERROR: Failed to generate certificates via OpenSSL command.\n");
+        fprintf(stderr, "[Server] Command tried: %s\n", cmd);
+        exit(1);
+    }
+    
+    fprintf(stderr, "[Server] Certificates generated successfully.\n");
+}
+
 // --- Helper: Get Current Time ---
 uint64_t now() {
     struct timeval tv;
@@ -395,6 +432,9 @@ int server_stream_create_notify(xqc_stream_t *stream, void *user_data) {
 int main(int argc, char *argv[]) {
     server_ctx_t ctx = {0};
     
+    // 0. Certs
+    ensure_certificates_exist();
+
     // 1. Libevent
     ctx.eb = event_base_new();
     
@@ -487,8 +527,8 @@ int main(int argc, char *argv[]) {
     
     // 4. SSL Config (Paths still needed for engine init, but we override via callback)
     xqc_engine_ssl_config_t ssl_config = {
-        .private_key_file = "/Users/rory/work/my_xquic_project/server_ec.key",
-        .cert_file        = "/Users/rory/work/my_xquic_project/server_ec.crt",
+        .private_key_file = "server.key",
+        .cert_file        = "server.crt",
         .ciphers          = NULL, // Use defaults
         .groups           = NULL, // Use defaults
         .session_ticket_key_data = NULL,
@@ -499,13 +539,13 @@ int main(int argc, char *argv[]) {
     SSL_library_init();
     OpenSSL_add_all_algorithms();
     
-    BIO *cert_bio = BIO_new_file("/Users/rory/work/my_xquic_project/server_ec.crt", "r");
+    BIO *cert_bio = BIO_new_file("server.crt", "r");
     if (!cert_bio) { perror("BIO_new_file cert"); return 1; }
     ctx.server_cert = PEM_read_bio_X509(cert_bio, NULL, NULL, NULL);
     BIO_free(cert_bio);
     if (!ctx.server_cert) { fprintf(stderr, "Failed to load cert\n"); return 1; }
     
-    BIO *key_bio = BIO_new_file("/Users/rory/work/my_xquic_project/server_ec.key", "r");
+    BIO *key_bio = BIO_new_file("server.key", "r");
     if (!key_bio) { perror("BIO_new_file key"); return 1; }
     ctx.server_key = PEM_read_bio_PrivateKey(key_bio, NULL, NULL, NULL);
     BIO_free(key_bio);

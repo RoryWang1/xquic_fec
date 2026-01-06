@@ -1,59 +1,0 @@
-ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 16.0.0 (clang-1600.0.26.6)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_2 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      59. 39.100 / 59. 39.100
-  libavcodec     61. 19.101 / 61. 19.101
-  libavformat    61.  7.100 / 61.  7.100
-  libavdevice    61.  3.100 / 61.  3.100
-  libavfilter    10.  4.100 / 10.  4.100
-  libswscale      8.  3.100 /  8.  3.100
-  libswresample   5.  3.100 /  5.  3.100
-  libpostproc    58.  3.100 / 58.  3.100
-2026-01-06 11:28:33.819 ffmpeg[25416:7012259] WARNING: Add NSCameraUseContinuityCameraDeviceType to your Info.plist to use AVCaptureDeviceTypeContinuityCamera.
-2026-01-06 11:28:33.905 ffmpeg[25416:7012259] WARNING: AVCaptureDeviceTypeExternal is deprecated for Continuity Cameras. Please use AVCaptureDeviceTypeContinuityCamera and add NSCameraUseContinuityCameraDeviceType to your Info.plist.
-[avfoundation @ 0x137e047b0] Selected pixel format (yuv420p) is not supported by the input device.
-[avfoundation @ 0x137e047b0] Supported pixel formats:
-[avfoundation @ 0x137e047b0]   uyvy422
-[avfoundation @ 0x137e047b0]   yuyv422
-[avfoundation @ 0x137e047b0]   nv12
-[avfoundation @ 0x137e047b0]   0rgb
-[avfoundation @ 0x137e047b0]   bgr0
-[avfoundation @ 0x137e047b0] Overriding selected pixel format to use uyvy422 instead.
-Input #0, avfoundation, from '0':
-  Duration: N/A, start: 36969.835230, bitrate: N/A
-  Stream #0:0: Video: rawvideo (UYVY / 0x59565955), uyvy422, 1280x720, 30 tbr, 1000k tbn
-Stream mapping:
-  Stream #0:0 -> #0:0 (rawvideo (native) -> h264 (libx264))
-Press [q] to stop, [?] for help
-[libx264 @ 0x131651b50] using cpu capabilities: ARMv8 NEON
-[libx264 @ 0x131651b50] profile High, level 3.1, 4:2:0, 8-bit
-Output #0, mpegts, to '/tmp/camera_fifo':
-  Metadata:
-    encoder         : Lavf61.7.100
-  Stream #0:0: Video: h264, yuv420p(tv, progressive), 1280x720, q=2-31, 5000 kb/s, 30 fps, 90k tbn
-      Metadata:
-        encoder         : Lavc61.19.101 libx264
-      Side data:
-        cpb: bitrate max/min/avg: 5000000/0/5000000 buffer size: 10000000 vbv_delay: N/A
-frame=    1 fps=0.0 q=19.0 size=       0KiB time=00:00:00.30 bitrate=   0.0kbits/s speed=0.594x    frame=   15 fps= 15 q=19.0 size=     283KiB time=00:00:00.66 bitrate=3476.5kbits/s speed=0.66x    frame=   47 fps= 31 q=17.0 size=     904KiB time=00:00:01.56 bitrate=4727.0kbits/s speed=1.03x    frame=   63 fps= 31 q=17.0 size=    1230KiB time=00:00:02.10 bitrate=4798.5kbits/s speed=1.04x    frame=   78 fps= 31 q=16.0 size=    1554KiB time=00:00:02.60 bitrate=4894.9kbits/s speed=1.03x    frame=   92 fps= 30 q=16.0 size=    1833KiB time=00:00:03.06 bitrate=4896.5kbits/s speed=1.01x    frame=  108 fps= 31 q=16.0 size=    2161KiB time=00:00:03.60 bitrate=4918.5kbits/s speed=1.02x    frame=  123 fps= 30 q=16.0 size=    2465KiB time=00:00:04.10 bitrate=4925.8kbits/s speed=1.02x    frame=  138 fps= 30 q=14.0 size=    2772KiB time=00:00:04.60 bitrate=4936.4kbits/s speed=1.01x    frame=  153 fps= 30 q=13.0 size=    3067KiB time=00:00:05.10 bitrate=4927.2kbits/s speed=1.01x    frame=  169 fps= 30 q=14.0 size=    3376KiB time=00:00:05.63 bitrate=4908.7kbits/s speed=1.01x    frame=  184 fps= 30 q=16.0 size=    3690KiB time=00:00:06.13 bitrate=4928.9kbits/s speed=1.01x    frame=  199 fps= 30 q=17.0 size=    4037KiB time=00:00:06.63 bitrate=4986.1kbits/s speed=1.01x    frame=  214 fps= 30 q=15.0 size=    4343KiB time=00:00:07.13 bitrate=4987.9kbits/s speed=1.01x    frame=  229 fps= 30 q=14.0 size=    4644KiB time=00:00:07.63 bitrate=4984.3kbits/s speed=1.01x    frame=  244 fps= 30 q=14.0 size=    4945KiB time=00:00:08.13 bitrate=4980.2kbits/s speed=1.01x    frame=  260 fps= 30 q=15.0 size=    5334KiB time=00:00:08.66 bitrate=5041.6kbits/s speed=1.01x    frame=  274 fps= 30 q=15.0 size=    5637KiB time=00:00:09.13 bitrate=5055.9kbits/s speed=1.01x    frame=  289 fps= 30 q=15.0 size=    5981KiB time=00:00:09.63 bitrate=5086.5kbits/s speed=1.01x    frame=  304 fps= 30 q=14.0 size=    6317KiB time=00:00:10.13 bitrate=5106.6kbits/s speed=1.01x    frame=  320 fps= 30 q=14.0 size=    6654KiB time=00:00:10.66 bitrate=5110.3kbits/s speed=1.01x    frame=  335 fps= 30 q=13.0 size=    6963KiB time=00:00:11.16 bitrate=5108.1kbits/s speed=1.01x    frame=  350 fps= 30 q=13.0 size=    7266KiB time=00:00:11.66 bitrate=5102.3kbits/s speed=1.01x    frame=  365 fps= 30 q=15.0 size=    7564KiB time=00:00:12.16 bitrate=5092.9kbits/s speed=1.01x    frame=  380 fps= 30 q=16.0 size=    7903KiB time=00:00:12.66 bitrate=5110.9kbits/s speed=1.01x    frame=  395 fps= 30 q=17.0 size=    8252KiB time=00:00:13.16 bitrate=5134.3kbits/s speed=1.01x    frame=  410 fps= 30 q=16.0 size=    8586KiB time=00:00:13.66 bitrate=5146.8kbits/s speed=1.01x    frame=  425 fps= 30 q=14.0 size=    8907KiB time=00:00:14.16 bitrate=5150.7kbits/s speed=   1x    frame=  440 fps= 30 q=15.0 size=    9213KiB time=00:00:14.66 bitrate=5145.7kbits/s speed=   1x    frame=  455 fps= 30 q=16.0 size=    9537KiB time=00:00:15.16 bitrate=5151.3kbits/s speed=   1x    frame=  470 fps= 30 q=15.0 size=    9847KiB time=00:00:15.66 bitrate=5148.8kbits/s speed=   1x    [vost#0:0/libx264 @ 0x1316517d0] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mpegts @ 0x13914fff0] Error muxing a packet
-[out#0/mpegts @ 0x13914fff0] Task finished with error code: -32 (Broken pipe)
-[out#0/mpegts @ 0x13914fff0] Terminating thread with return code -32 (Broken pipe)
-[out#0/mpegts @ 0x13914fff0] Error writing trailer: Broken pipe
-[out#0/mpegts @ 0x13914fff0] Error closing file: Broken pipe
-[out#0/mpegts @ 0x13914fff0] video:9723KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 3.187162%
-frame=  479 fps= 30 q=15.0 Lsize=   10033KiB time=00:00:15.96 bitrate=5147.4kbits/s speed=   1x    
-[libx264 @ 0x131651b50] frame I:2     Avg QP:11.14  size: 71014
-[libx264 @ 0x131651b50] frame P:477   Avg QP:10.40  size: 20575
-[libx264 @ 0x131651b50] mb I  I16..4: 25.8% 57.3% 16.9%
-[libx264 @ 0x131651b50] mb P  I16..4:  5.1%  5.9%  0.3%  P16..4: 48.1% 11.8%  6.8%  0.0%  0.0%    skip:21.9%
-[libx264 @ 0x131651b50] 8x8 transform intra:52.3% inter:20.4%
-[libx264 @ 0x131651b50] coded y,uvDC,uvAC intra: 74.2% 74.1% 56.3% inter: 29.1% 13.0% 1.2%
-[libx264 @ 0x131651b50] i16 v,h,dc,p: 24% 23% 27% 26%
-[libx264 @ 0x131651b50] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 13% 23% 40%  2%  5%  3%  5%  3%  5%
-[libx264 @ 0x131651b50] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 15% 26% 32%  2%  7%  4%  6%  2%  5%
-[libx264 @ 0x131651b50] i8c dc,h,v,p: 63% 17% 15%  5%
-[libx264 @ 0x131651b50] Weighted P-Frames: Y:4.6% UV:0.0%
-[libx264 @ 0x131651b50] kb/s:4988.46
-Exiting normally, received signal 15.

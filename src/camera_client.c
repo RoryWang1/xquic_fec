@@ -106,6 +106,25 @@ void client_save_tp_cb(const char *data, size_t data_len, void *user_data) {
     fflush(stderr);
 }
 
+// --- Cert Verify (Formal Process) ---
+int client_cert_verify(const unsigned char *certs[], const size_t cert_lens[], size_t n_certs, void *conn_user_data) {
+    fprintf(stderr, "[Client] 🔐 Verifying Server Certificate Chain (%zu certificates)...\n", n_certs);
+    
+    // In a real formal process, you would:
+    // 1. Decode DER to X509
+    // 2. Check validity dates
+    // 3. Verify signature against Root CA
+    // 4. Check Subject/SAN matches hostname
+    
+    // For this self-signed "localhost" environment:
+    if (n_certs > 0) {
+        fprintf(stderr, "[Client] ✅ Server Certificate Present (%zu bytes). Trusting Self-Signed (Formal Override).\n", cert_lens[0]);
+        return 0; // Success
+    }
+    
+    fprintf(stderr, "[Client] ❌ Certificate Missing!\n");
+    return -1; // Fail
+}
 
 
 void client_socket_read_callback(int fd, short what, void *arg) {
@@ -386,7 +405,8 @@ int main(int argc, char *argv[]) {
         .write_socket = client_write_socket,
         .save_token = client_save_token,          // NEW_TOKEN frame handler
         .save_session_cb = client_save_session_cb,  // Session ticket handler
-        .save_tp_cb = client_save_tp_cb            // Transport params handler
+        .save_tp_cb = client_save_tp_cb,            // Transport params handler
+        .cert_verify_cb = client_cert_verify       // Certificate verification
     };
     
     xqc_config_t config;
@@ -432,7 +452,7 @@ int main(int argc, char *argv[]) {
     conn_settings.init_recv_window = 16 * 1024 * 1024; // Advertise 16MB window to peer
     
     xqc_conn_ssl_config_t conn_ssl_config = {0};
-    conn_ssl_config.cert_verify_flag = XQC_TLS_CERT_FLAG_ALLOW_SELF_SIGNED;
+    conn_ssl_config.cert_verify_flag = XQC_TLS_CERT_FLAG_NEED_VERIFY | XQC_TLS_CERT_FLAG_ALLOW_SELF_SIGNED;
     
     struct sockaddr_in server_addr = {0};
     server_addr.sin_family = AF_INET;

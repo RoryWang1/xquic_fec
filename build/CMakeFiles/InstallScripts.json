@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/rory/work/my_xquic_project/build/cmake_install.cmake",
-		"/Users/rory/work/my_xquic_project/build/third_party/xquic/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

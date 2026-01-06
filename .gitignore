@@ -1,0 +1,8 @@
+build/
+logs/*.log
+*.crt
+*.key
+*.o
+*.a
+*.dylib
+.DS_Store

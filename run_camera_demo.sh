@@ -32,7 +32,7 @@ echo "[INFO] 编译成功。"
 # 3. 启动服务器
 echo "[INFO] 启动 Camera Server..."
 # 服务器会在后台运行，监听 4433 端口，并读取 /tmp/camera_fifo
-"${BUILD_DIR}/camera_server" > "${PROJECT_ROOT}/server.log" 2>&1 &
+"${BUILD_DIR}/camera_server" > "${PROJECT_ROOT}/logs/server.log" 2>&1 &
 SERVER_PID=$!
 sleep 1 # 等待服务器初始化
 if ! kill -0 $SERVER_PID 2>/dev/null; then
@@ -49,8 +49,8 @@ echo "[INFO] 正在将测试视频流写入 FIFO: ${FIFO_PATH}"
 # 优化：提升至 720p 分辨率，设置 5Mbps 码率，使用 high profile 和 veryfast preset
 ffmpeg -y -f avfoundation -framerate 30 -video_size 1280x720 -i "0" \
        -c:v libx264 -preset veryfast -tune zerolatency -profile:v high \
-       -b:v 5000k -maxrate 5000k -bufsize 10000k -pix_fmt yuv420p \
-       -f mpegts "${FIFO_PATH}" > "${PROJECT_ROOT}/ffmpeg.log" 2>&1 &
+       -b:v 8000k -maxrate 8000k -bufsize 16000k -pix_fmt yuv420p \
+       -f mpegts "${FIFO_PATH}" > "${PROJECT_ROOT}/logs/ffmpeg.log" 2>&1 &
 FFMPEG_PID=$!
 sleep 1
 if ! kill -0 $FFMPEG_PID 2>/dev/null; then
@@ -69,8 +69,8 @@ echo "========================================="
 
 # 客户端连接服务器，将接收到的数据输出到 stdout
 # FFplay 从 stdin 读取数据并播放
-"${BUILD_DIR}/camera_client" 2> "${PROJECT_ROOT}/client.log" | \
-ffplay -i - -fflags nobuffer -flags low_delay -framedrop -window_title "XQUIC Stream" -autoexit > /dev/null 2>&1
+"${BUILD_DIR}/camera_client" 2> "${PROJECT_ROOT}/logs/client.log" | \
+ffplay -i - -f mpegts -fflags nobuffer -flags low_delay -framedrop -strict experimental -window_title "XQUIC Stream" -autoexit > /dev/null 2>&1
 
 # 退出处理
 echo ""
