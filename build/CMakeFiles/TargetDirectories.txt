@@ -1,0 +1,9 @@
+/Users/rory/work/my_xquic_project/build/CMakeFiles/demo_app.dir
+/Users/rory/work/my_xquic_project/build/CMakeFiles/camera_server.dir
+/Users/rory/work/my_xquic_project/build/CMakeFiles/camera_client.dir
+/Users/rory/work/my_xquic_project/build/CMakeFiles/edit_cache.dir
+/Users/rory/work/my_xquic_project/build/CMakeFiles/rebuild_cache.dir
+/Users/rory/work/my_xquic_project/build/third_party/xquic/CMakeFiles/xquic-static.dir
+/Users/rory/work/my_xquic_project/build/third_party/xquic/CMakeFiles/xquic.dir
+/Users/rory/work/my_xquic_project/build/third_party/xquic/CMakeFiles/edit_cache.dir
+/Users/rory/work/my_xquic_project/build/third_party/xquic/CMakeFiles/rebuild_cache.dir
