@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <string.h>
 #include <errno.h>
+#include <signal.h>
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 480
@@ -28,6 +29,15 @@ typedef struct {
 
 VideoSource msgLeft, msgRight;
 SDL_Renderer *renderer = NULL;
+
+// Global flag for graceful shutdown
+static volatile int g_quit_requested = 0;
+
+// Signal handler for graceful shutdown
+void signal_handler(int signum) {
+    printf("[DualPlayer] Received signal %d, shutting down gracefully...\n", signum);
+    g_quit_requested = 1;
+}
 
 void* reader_thread(void *arg) {
     VideoSource *src = (VideoSource*)arg;
@@ -78,6 +88,10 @@ int main(int argc, char *argv[]) {
     pthread_mutex_init(&msgLeft.mutex, NULL);
     pthread_mutex_init(&msgRight.mutex, NULL);
 
+    // Register signal handlers for graceful shutdown
+    signal(SIGINT, signal_handler);   // Ctrl+C
+    signal(SIGTERM, signal_handler);  // kill command
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0) return 1;
 
     SDL_Window *window = SDL_CreateWindow("XQUIC Comparison (Single Window, Separate Decoders)",
@@ -98,7 +112,7 @@ int main(int argc, char *argv[]) {
 
     SDL_Event e;
     int quit = 0;
-    while (!quit) {
+    while (!quit && !g_quit_requested) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) quit = 1;
         }

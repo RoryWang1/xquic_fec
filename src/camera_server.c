@@ -524,7 +524,7 @@ int main(int argc, char *argv[]) {
     
     xqc_config_t config;
     xqc_engine_get_default_config(&config, XQC_ENGINE_SERVER);
-    config.cfg_log_level = XQC_LOG_DEBUG; // Enable warning/debug logging
+    // config.cfg_log_level = XQC_LOG_DEBUG; // Enable warning/debug logging
     
     // 4. SSL Config (Paths still needed for engine init, but we override via callback)
     xqc_engine_ssl_config_t ssl_config = {
@@ -586,7 +586,7 @@ int main(int argc, char *argv[]) {
     conn_settings.fec_callback = xqc_reed_solomon_code_cb;
     
     // FEC Parameters
-    conn_settings.fec_params.fec_code_rate = 0.5f; 
+    conn_settings.fec_params.fec_code_rate = 0.2f; 
     conn_settings.fec_params.fec_max_symbol_num_per_block = 10;
     conn_settings.fec_params.fec_max_window_size = 40;
     
@@ -595,6 +595,11 @@ int main(int argc, char *argv[]) {
     conn_settings.fec_params.fec_encoder_schemes[0] = XQC_REED_SOLOMON_CODE;
     conn_settings.fec_params.fec_decoder_schemes_num = 1;
     conn_settings.fec_params.fec_decoder_schemes[0] = XQC_REED_SOLOMON_CODE;
+    
+    // --- BBR Congestion Control ---
+    // Use BBR to maintain throughput under packet loss (Cubic collapses)
+    conn_settings.cong_ctrl_callback = xqc_bbr_cb;
+    
     xqc_server_set_conn_settings(ctx.engine, &conn_settings);
     
     // 6. Loop
