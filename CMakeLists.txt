@@ -10,6 +10,8 @@ set(XQC_SUPPORT_SENDMMSG_BUILD OFF CACHE BOOL "" FORCE) # macOS 不支持
 set(XQC_ENABLE_EVENT_LOG ON CACHE BOOL "" FORCE)
 set(XQC_ENABLE_BBR2 ON CACHE BOOL "" FORCE)
 set(XQC_ENABLE_RENO ON CACHE BOOL "" FORCE)
+set(XQC_ENABLE_FEC ON CACHE BOOL "" FORCE)
+set(XQC_ENABLE_RSC ON CACHE BOOL "" FORCE)
 set(GCOV OFF CACHE BOOL "" FORCE)
 
 # 配置 SSL 路径 (指向 third_party/xquic 下已经存在的 boringssl)
@@ -29,25 +31,7 @@ include_directories(${LIBEVENT_ROOT}/include)
 link_directories(${LIBEVENT_ROOT}/lib)
 set(LIBEVENT_LIB event)
 
-# 创建我们要开发的 App
-add_executable(demo_app src/main.c)
 
-# 包含 xquic 头文件
-target_include_directories(demo_app PRIVATE 
-    third_party/xquic/include 
-    ${SSL_INC_PATH}
-)
-
-# 链接 xquic 库
-# xquic-static 是 xquic CMakeLists 里定义的 target 名字
-target_link_libraries(demo_app PRIVATE xquic-static)
-
-# 因为 xquic-static 可能没有传递 SSL 的链接依赖（因为它也是静态库），我们需要显式链接 SSL
-target_link_libraries(demo_app PRIVATE ${SSL_LIB_PATH} pthread)
-
-if(APPLE)
-    target_link_libraries(demo_app PRIVATE "-framework CoreFoundation")
-endif()
 
 # --- Camera Streaming Demo ---
 
@@ -72,5 +56,11 @@ target_link_libraries(camera_client PRIVATE xquic-static ${SSL_LIB_PATH} pthread
 if(APPLE)
     target_link_libraries(camera_client PRIVATE "-framework CoreFoundation")
 endif()
+
+# Dual Player (SDL2)
+# Links against SDL2 from Homebrew
+add_executable(dual_player src/dual_player.c)
+target_include_directories(dual_player PRIVATE /opt/homebrew/include)
+target_link_libraries(dual_player PRIVATE -L/opt/homebrew/lib -lSDL2 pthread)
 
 

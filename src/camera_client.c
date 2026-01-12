@@ -451,6 +451,22 @@ int main(int argc, char *argv[]) {
     // However, we should set QUIC flow control limits too if defaults are low.
     conn_settings.init_recv_window = 16 * 1024 * 1024; // Advertise 16MB window to peer
     
+    // --- FEC Configuration ---
+    conn_settings.enable_encode_fec = 1;
+    conn_settings.enable_decode_fec = 1;
+    conn_settings.fec_callback = xqc_reed_solomon_code_cb;
+    
+    // FEC Parameters
+    conn_settings.fec_params.fec_code_rate = 0.5f; // 50% redundancy (high protection)
+    conn_settings.fec_params.fec_max_symbol_num_per_block = 10;
+    conn_settings.fec_params.fec_max_window_size = 40;
+    
+    // Supported schemes
+    conn_settings.fec_params.fec_encoder_schemes_num = 1;
+    conn_settings.fec_params.fec_encoder_schemes[0] = XQC_REED_SOLOMON_CODE;
+    conn_settings.fec_params.fec_decoder_schemes_num = 1;
+    conn_settings.fec_params.fec_decoder_schemes[0] = XQC_REED_SOLOMON_CODE;
+    
     xqc_conn_ssl_config_t conn_ssl_config = {0};
     conn_ssl_config.cert_verify_flag = XQC_TLS_CERT_FLAG_NEED_VERIFY | XQC_TLS_CERT_FLAG_ALLOW_SELF_SIGNED;
     
